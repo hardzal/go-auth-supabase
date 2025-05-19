@@ -61,3 +61,18 @@ func (h *AuthHandler) LoginHandler(ctx *fiber.Ctx) error {
 		Token:   token,
 	})
 }
+
+func (h *AuthHandler) AuthCheck(ctx *fiber.Ctx) error {
+	userId := ctx.Locals("USER").(string)
+
+	if userId == "" {
+		return ctx.Status(fiber.StatusForbidden).JSON(fiber.Map{
+			"message": "Unauthorized access",
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Access accepted",
+		"user_id": userId,
+	})
+}

@@ -11,7 +11,7 @@ import (
 
 type IAuthRepository interface {
 	LoginUser(user models.UserLoginDTO) (string, error)
-	RegisterUser(user models.UserRegisterDTO) (models.UserModel, error)
+	RegisterUser(user models.UserRegisterDTO) (models.User, error)
 }
 
 type AuthService struct {
@@ -22,7 +22,7 @@ func NewAuthService(repo *repository.AuthRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) RegisterUser(user models.UserRegisterDTO) (*models.UserModel, error) {
+func (s *AuthService) RegisterUser(user models.UserRegisterDTO) (*models.User, error) {
 	// check exists email
 	checkUser, _ := s.repo.GetUserByEmail(user.Email)
 
@@ -36,7 +36,7 @@ func (s *AuthService) RegisterUser(user models.UserRegisterDTO) (*models.UserMod
 		return nil, err
 	}
 
-	userCreated := models.UserModel{
+	userCreated := models.User{
 		Username: user.Username,
 		Email:    user.Email,
 		Password: hashedPassword,
